@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>FoundryLabs.BasicChat</AssemblyName>
+    <RootNamespace>FoundryLabs.BasicChat</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.FoundryClient\Shared.FoundryClient.csproj" />
+  </ItemGroup>
+</Project>

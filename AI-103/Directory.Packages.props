@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <!-- NuGet Central Package Management, stable releases verified 2026-11-12. -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="OpenAI" Version="2.15.0" />
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
+  </ItemGroup>
+</Project>

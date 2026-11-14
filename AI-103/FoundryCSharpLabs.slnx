@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="src/01.BasicChat/01.BasicChat.csproj" />
+  <Project Path="src/02.ResponsesChat/02.ResponsesChat.csproj" />
+  <Project Path="src/03.ContextChat/03.ContextChat.csproj" />
+  <Project Path="src/04.StreamingChat/04.StreamingChat.csproj" />
+  <Project Path="src/05.AsyncChat/05.AsyncChat.csproj" />
+  <Project Path="src/06.ChatHistory/06.ChatHistory.csproj" />
+  <Project Path="src/Shared.FoundryClient/Shared.FoundryClient.csproj" />
+</Solution>

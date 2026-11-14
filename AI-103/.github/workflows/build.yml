@@ -1,0 +1,16 @@
+name: .NET 11 solution build
+on:
+  push:
+  pull_request:
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 11.0.x
+      - name: Restore
+        run: dotnet restore FoundryCSharpLabs.slnx
+      - name: Build
+        run: dotnet build FoundryCSharpLabs.slnx --configuration Release --no-restore
