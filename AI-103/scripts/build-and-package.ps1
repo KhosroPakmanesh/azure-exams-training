@@ -15,7 +15,9 @@ foreach ($path in $include) {
     $destination = Join-Path $stage $path
     $parent = Split-Path $destination -Parent
     if (-not (Test-Path $parent)) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
-    Copy-Item -LiteralPath $from -Destination $destination -Recurse -Force
+    if (Test-Path -LiteralPath $from) {
+        Copy-Item -LiteralPath $from -Destination $destination -Recurse -Force
+    }
 }
 # Never package filled .env files, even when building with compiled binaries.
 Get-ChildItem -LiteralPath $stage -Recurse -Force -File | Where-Object {

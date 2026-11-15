@@ -17,9 +17,14 @@ check(props.findtext("PropertyGroup/TargetFramework") == "net11.0", "Every proje
 check(props.findtext("PropertyGroup/LangVersion") == "15.0", "C# language version 15")
 solution = ET.parse(root / "FoundryCSharpLabs.slnx").getroot()
 paths = [p.attrib["Path"] for p in solution.findall("Project")]
-check(len(paths) == len(set(paths)) == 9, "One .slnx with nine unique projects")
+expected_apps = ["01.BasicChat", "02.ResponsesChat", "03.ContextChat", "04.StreamingChat",
+                 "05.AsyncChat", "06.ChatHistory", "07.CodeInterpreter", "08.WebSearch",
+                 "09.FileSearch", "10.FunctionCalling", "11.ToolsChat"]
+expected = {f"src/{name}/{name}.csproj" for name in expected_apps}
+expected.add("src/Shared.FoundryClient/Shared.FoundryClient.csproj")
+check(set(paths) == expected and len(paths) == 12, "One .slnx with the 11 labs and shared client")
 check(not list(root.glob("*.sln")), "No legacy .sln alongside .slnx")
-check(all((root / p).is_file() for p in paths), "All nine .csproj files exist")
+check(all((root / p).is_file() for p in paths), "All twelve .csproj files exist")
 packages = ET.parse(root / "Directory.Packages.props").getroot()
 versions = {p.get("Include"): p.get("Version") for p in packages.findall("ItemGroup/PackageVersion")}
 check(versions == {"OpenAI": "2.15.0", "Azure.Identity": "1.21.0"}, "Verified stable versions centralized")
@@ -37,11 +42,21 @@ for name in ("publish-all.sh", "publish-all.ps1", "build-and-package.sh", "build
     check("FoundryCSharpLabs.slnx" in content, f"{name}: uses SLNX") if "publish" in name or "build" in name else None
     check(".sln'" not in content and "net8.0" not in content, f"{name}: no old target")
 env_file = root / "src/Shared.FoundryClient/.env"
-check(env_file.is_file(), "Shared project includes editable .env template")
+check(not env_file.exists() or env_file.is_file(), "Optional shared .env is a regular file")
 check((root / "src/Shared.FoundryClient/.env.example").is_file(), "Safe .env.example is present")
-check(all(f"{key}=" in env_file.read_text() for key in ("AZURE_OPENAI_ENDPOINT", "MODEL_DEPLOYMENT", "AZURE_OPENAI_API_KEY")), "Shared .env has all credential fields")
+check(all(f"{key}=" in (env_file if env_file.is_file() else root / "src/Shared.FoundryClient/.env.example").read_text() for key in ("AZURE_OPENAI_ENDPOINT", "MODEL_DEPLOYMENT", "AZURE_OPENAI_API_KEY")), "Credential template has all fields")
 check((root / "src/Shared.FoundryClient/FoundryEnvFile.cs").is_file(), "Shared .env loader exists")
 check("FoundryEnvFile.Load()" in (root / "src/Shared.FoundryClient/FoundryOptions.cs").read_text(), "Foundry options load shared .env")
+for name, tool in (("07.CodeInterpreter", "code_interpreter"), ("08.WebSearch", "web_search"),
+                   ("09.FileSearch", "file_search"), ("10.FunctionCalling", "function"),
+                   ("11.ToolsChat", "file_search")):
+    check(tool in (root / "src" / name / "Program.cs").read_text(), f"{name} configures {tool}")
+check("web_search" in (root / "src/11.ToolsChat/Program.cs").read_text(),
+      "11.ToolsChat also configures web_search")
+check((root / "src/Shared.FoundryClient/FoundryToolRestClient.cs").is_file(),
+      "REST adapter for tool-enabled Responses exists")
+check((root / "src/Shared.FoundryClient/FoundryVectorStoreSetup.cs").is_file(),
+      "Document upload and vector store helper exists")
 if failures:
     raise SystemExit(f"{len(failures)} validation failure(s).")
 print("PASS: .NET 11 project structure verified. C# compilation not performed.")

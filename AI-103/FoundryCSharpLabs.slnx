@@ -5,5 +5,10 @@
   <Project Path="src/04.StreamingChat/04.StreamingChat.csproj" />
   <Project Path="src/05.AsyncChat/05.AsyncChat.csproj" />
   <Project Path="src/06.ChatHistory/06.ChatHistory.csproj" />
+  <Project Path="src/07.CodeInterpreter/07.CodeInterpreter.csproj" />
+  <Project Path="src/08.WebSearch/08.WebSearch.csproj" />
+  <Project Path="src/09.FileSearch/09.FileSearch.csproj" />
+  <Project Path="src/10.FunctionCalling/10.FunctionCalling.csproj" />
+  <Project Path="src/11.ToolsChat/11.ToolsChat.csproj" />
   <Project Path="src/Shared.FoundryClient/Shared.FoundryClient.csproj" />
 </Solution>

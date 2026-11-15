@@ -12,16 +12,23 @@ This source ZIP has not been compiled on the generation machine, which lacks .NE
 - [ ] Project 04 prints a streamed reply and maintains context.
 - [ ] Project 05 awaits responses and can cancel with Ctrl+C.
 - [ ] Project 06 creates, lists, and resumes a conversation after restarting.
-- [ ] Project 07 `/api/health` returns success, API chat persists on disk, `/stream` delivers deltas and done.
-- [ ] Project 08 displays saved chats and streamed response text at http://localhost:5081.
-
-Before deploying publicly, add user authentication, per-user storage isolation, rate limits, network TLS, monitoring, retention policies, and a production-grade database.
+- [ ] Project 07 uses Code Interpreter for a Python calculation.
+- [ ] Project 08 uses Web Search and provides source citations.
+- [ ] Project 09 uploads a document into a vector store, waits for indexing, and answers a document question.
+- [ ] Project 10 invokes the approved local `get_time` function and returns its output to the model.
+- [ ] Project 11 answers a current destination question using web search, then a travel-brochure question using file search.
 
 - [ ] `python3 scripts/verify-source.py` passes structural checks (no .NET SDK required).
-- [ ] `dotnet sln FoundryCSharpLabs.slnx list` shows all nine projects.
+- [ ] `dotnet sln FoundryCSharpLabs.slnx list` shows all twelve projects.
 
 ## Local credentials
 
-- [ ] Edit `src/Shared.FoundryClient/.env` with your Foundry endpoint and exact deployment name.
+- [ ] Copy `src/Shared.FoundryClient/.env.example` to `.env` if needed, then set the Foundry endpoint and exact deployment name.
 - [ ] Put your API key in `AZURE_OPENAI_API_KEY` or leave it blank and run `az login`.
 - [ ] Never commit your edited `.env` or include it in a public ZIP.
+
+## File search resources
+
+- [ ] Supply PDFs/documents or an existing `vs_...` ID to Project 09.
+- [ ] Supply the official Margie’s Travel brochure PDFs or a prepared `vs_...` ID to Project 11.
+- [ ] Record created vector store IDs for reuse. Delete unused vector stores and uploaded files in Azure to avoid charges.

@@ -1,19 +1,17 @@
-# Foundry C# Labs: .NET 11, 8 projects, 1 .slnx solution
+# Foundry C# Labs: .NET 11, 11 projects, 1 .slnx solution
 
-A Visual Studio / .NET 11 solution that translates the Microsoft Learning **Create a generative AI chat app** exercise into five C# console labs, then expands it with history, an HTTP API, and an interactive Blazor web UI. All projects share `Shared.FoundryClient`.
+A Visual Studio / .NET 11 solution with the original six C# console chat labs plus five separate lessons from Microsoft Learn **Develop generative AI apps that use tools**. All 11 apps share `Shared.FoundryClient`. Projects 07–11 cover the four named tools and the Margie’s Travel hands-on exercise.
 
 **Original exercise:** https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/03-foundry-sdk.html
 
-> Important: The source package was assembled in an environment without the .NET SDK or access to NuGet. The projects have not been compiled or tested against a live Microsoft Foundry deployment here. Run `dotnet restore` and `dotnet build` on a development machine before use. No DLLs or executables are included in the supplied ZIP.
+> Important: The new projects have not been compiled or tested against a live Microsoft Foundry deployment in this environment, which has no .NET SDK. Run `dotnet restore` and `dotnet build` locally. This source ZIP does not include compiled DLLs.
 
 ## .NET 11 upgrade (November 12, 2026)
 
 - Targets **`net11.0`**, using **C# 15** and the release **.NET 11 SDK 11.0.100** (see `global.json`).
 - Uses an XML solution **`FoundryCSharpLabs.slnx`** instead of the legacy `.sln` format. The .NET SDK supports `.slnx` directly.
 - Centralizes **stable, verified NuGet versions** in `Directory.Packages.props`: **OpenAI 2.15.0** and **Azure.Identity 1.21.0**. Those are the newest stable published versions found on November 12, 2026, so no unnecessary prerelease upgrade was applied.
-- The ASP.NET Core projects use the **Microsoft.NET.Sdk.Web** shared framework, so ASP.NET Core 11 is supplied by `net11.0` without separate NuGet references.
-- Projects 01–08 retain their original features; shared SDK client code and JSON persistence are maintained.
-- See `UPGRADE_NOTES.md` for migration details and version references.
+- Projects 01–06 retain their original features; projects 07–11 are separate console tool labs. The tool labs use a small REST adapter on the same Azure OpenAI v1 endpoint so their tool JSON mirrors the Microsoft Learn lessons.
 
 ## Solution layout
 
@@ -25,8 +23,11 @@ A Visual Studio / .NET 11 solution that translates the Microsoft Learning **Crea
 | `src/04.StreamingChat` | `FoundryLabs.StreamingChat` | Console | Streaming Responses API with context |
 | `src/05.AsyncChat` | `FoundryLabs.AsyncChat` | Console | Async/await with Ctrl+C cancellation |
 | `src/06.ChatHistory` | `FoundryLabs.ChatHistory` | Console | Persistent chats, list/new/resume/show |
-| `src/07.ChatApi` | `FoundryLabs.ChatApi` | ASP.NET Core | REST API + SSE stream for conversations |
-| `src/08.BlazorChat` | `FoundryLabs.BlazorChat` | Blazor Web App | Streaming chat interface and conversation list |
+| `src/07.CodeInterpreter` | `FoundryLabs.CodeInterpreter` | Console | `code_interpreter` for Python execution |
+| `src/08.WebSearch` | `FoundryLabs.WebSearch` | Console | `web_search` for current information |
+| `src/09.FileSearch` | `FoundryLabs.FileSearch` | Console | `file_search` with uploaded files and a vector store |
+| `src/10.FunctionCalling` | `FoundryLabs.FunctionCalling` | Console | `function` with local `get_time` execution |
+| `src/11.ToolsChat` | `FoundryLabs.ToolsChat` | Console | Margie’s Travel exercise: `file_search` + `web_search` |
 | `src/Shared.FoundryClient` | `FoundryLabs.Shared` | Class library | Configuration, SDK clients, responses wrapper, persistence, shared DTOs |
 
 ## Prerequisites
@@ -39,7 +40,7 @@ A Visual Studio / .NET 11 solution that translates the Microsoft Learning **Crea
 
 ## Configure your credentials in the shared `.env` file
 
-Open **`src/Shared.FoundryClient/.env`**. This file is included with the downloaded source ZIP and is automatically loaded by the shared library for the six console apps and the REST API. Fill it in:
+Open **`src/Shared.FoundryClient/.env`**. After creating a local `.env` from `.env.example`, this file is automatically loaded by the shared library for the eleven console apps. Fill it in:
 
 ```dotenv
 AZURE_OPENAI_ENDPOINT=https://YOUR-RESOURCE.openai.azure.com/
@@ -51,7 +52,7 @@ SYSTEM_INSTRUCTIONS=
 - Find the resource **endpoint**, **deployment name**, and **API key** in Microsoft Foundry or the Azure portal. Use the Azure OpenAI resource URL, **not** a Foundry project endpoint containing `/api/projects/`.
 - If using **Microsoft Entra ID** instead of an API key, leave `AZURE_OPENAI_API_KEY=` blank and run `az login` with an account granted the required role.
 - Empty `SYSTEM_INSTRUCTIONS` uses a default system prompt.
-- `.env` is ignored by Git, but the provided download contains an **empty template** for you to fill in. Do not commit, email, or publish the edited file. `.env.example` is a safe blank template if you need to recreate it.
+- The download includes `.env.example`, a safe blank template. Copy it to `.env` and enter your settings. `.env` is ignored by Git and excluded from release packages. Never commit or share a populated `.env`.
 - Explicit process environment variables, if set, **override** values in the `.env` file. The file loader does not overwrite system environment variables.
 - File loading works when starting an application through `dotnet run` or Visual Studio from the **source checkout**. If you deploy/publish apps without the source tree, set environment variables or provide a secret manager in the deployment environment. The build-and-package scripts exclude the populated `.env` so secrets do not enter publish ZIPs.
 
@@ -62,15 +63,15 @@ SYSTEM_INSTRUCTIONS=
 | `AZURE_OPENAI_API_KEY` | No | If provided, uses API key; otherwise `DefaultAzureCredential` |
 | `SYSTEM_INSTRUCTIONS` | No | Override default system prompt |
 
-Other optional host settings can still be supplied as operating-system environment variables: `CHAT_HISTORY_DIR`, `CHAT_API_URL`, `CHAT_API_BIND_URL`, `BLAZOR_BIND_URL`.
+The optional `CHAT_HISTORY_DIR` setting can still be supplied as an operating-system environment variable.
 
-**Security:** Do not commit API keys, tokens, or customer conversations. The local JSON files store chat messages as plain text. The API key is used on the server/console only, never in browser-side code.
+**Security:** Do not commit API keys, tokens, or customer conversations. The local JSON files store chat messages as plain text. The API key is used by the console applications.
 
 ## Verify source structure
 
 From the solution directory, run `python3 scripts/verify-source.py` (or `python scripts/verify-source.py`) to validate the solution/project/package metadata without needing .NET.
 
-## Restore and compile all nine assemblies
+## Restore and compile all twelve assemblies
 
 Open `FoundryCSharpLabs.slnx` in Visual Studio 2026 (v18.12+) or run:
 
@@ -79,7 +80,7 @@ dotnet restore FoundryCSharpLabs.slnx
 dotnet build FoundryCSharpLabs.slnx --configuration Release
 ```
 
-A successful Release build generates **nine DLLs** in `src/<project>/bin/Release/net11.0/`: eight application assemblies and one class library, plus the required SDK-generated runtime, dependency and host files. To put compiled outputs into a distribution folder, use `scripts/publish-all.ps1` (Windows PowerShell) or `scripts/publish-all.sh` (macOS/Linux) after the SDK is installed. To create a new ZIP that contains both source **and the compiled assemblies**, use `scripts/build-and-package.ps1` (PowerShell) or `scripts/build-and-package.sh` (macOS/Linux).
+A successful Release build generates **twelve DLLs** in `src/<project>/bin/Release/net11.0/`: eleven application assemblies and one class library, plus the required SDK-generated runtime, dependency and host files. To put compiled outputs into a distribution folder, use `scripts/publish-all.ps1` (Windows PowerShell) or `scripts/publish-all.sh` (macOS/Linux) after the SDK is installed. To create a new ZIP that contains both source **and the compiled assemblies**, use `scripts/build-and-package.ps1` (PowerShell) or `scripts/build-and-package.sh` (macOS/Linux).
 
 > The ZIP in this response contains complete source and build scripts, **not precompiled DLLs**. Compilation could not be verified in the file-generation environment.
 
@@ -92,47 +93,32 @@ dotnet run --project src/03.ContextChat
 dotnet run --project src/04.StreamingChat
 dotnet run --project src/05.AsyncChat
 dotnet run --project src/06.ChatHistory
+dotnet run --project src/07.CodeInterpreter
+dotnet run --project src/08.WebSearch
+dotnet run --project src/09.FileSearch -- ./path/to/documents
+dotnet run --project src/10.FunctionCalling
+dotnet run --project src/11.ToolsChat -- ./path/to/brochures
 ```
 
 Each console app accepts prompts and `quit`; project 06 also supports `new [title]`, `list`, `use <guid>`, and `show`.
 
 Try asking `Tell me about the ELIZA chatbot` and then `How does it compare to modern LLMs?` in projects 02 and 03. Project 02 intentionally loses the referent. Project 03 retains it through `previous_response_id`.
 
-### Start the web API and UI
+## Run the Microsoft Learn tool lessons (Projects 07–11)
 
-In terminal A:
+These are separate console programs, not a replacement for Projects 01–06. Projects 07–11 use the existing `.env` and the same deployed Responses-compatible model. Their tool requests use a small shared HTTP client for the Azure OpenAI v1 REST endpoint, alongside the existing OpenAI and Azure.Identity SDK dependencies. Tool availability depends on your Foundry model, region, and resource configuration.
 
-```bash
-dotnet run --project src/07.ChatApi
-```
+- **07 Code Interpreter:** no document setup. Try `Calculate the square root of 16 using Python.` The model runs Python in the hosted sandbox.
+- **08 Web Search:** no document setup. Try a current-events query. Web Search availability and applicable Grounding with Bing terms depend on your Foundry resource and region.
+- **09 File Search:** pass a document directory or one or more files (`.pdf`, `.txt`, `.md`, `.docx`). A new vector store is created, documents are uploaded and indexing is polled until ready, and you can ask document questions. Pass the displayed `vs_...` ID on later runs to reuse the store.
+- **10 Function:** try `What is the current local time?`. The model can request the zero-argument `get_time` function; the C# program executes only that allowlisted function, returns its output through `function_call_output`, and waits for a final answer.
+- **11 Tool-enabled chat:** the C# version of Microsoft's Margie's Travel exercise. Supply a directory containing the **official travel brochure PDFs** from the exercise repository, or a previously prepared `vs_...` store ID. Ask what's happening in a destination next month and follow up with which hotels Margie's Travel offers there. The same chat uses `web_search`, `file_search`, and `previous_response_id`. No brochures are bundled in this ZIP.
 
-In terminal B:
+For the original exercise's brochures, see the [Microsoft Learning lab](https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/04a-use-own-data.html) and its [sample files repository](https://github.com/MicrosoftLearning/mslearn-ai-studio/tree/main/labfiles/tools/python/tools-app).
 
-```bash
-dotnet run --project src/08.BlazorChat
-```
+**Vector store costs and cleanup:** New stores and file uploads persist in your Azure resource after the program exits. Note the printed store ID, reuse it when appropriate, and delete unused stores and files through the service or Azure tooling. Documents are uploaded to your configured resource; don't use sensitive files without authorization.
 
-Open **http://localhost:5081**. The UI calls the server-side API at `http://localhost:5080/`. It supports new conversations, selection of saved conversations, and incremental streamed responses. Both projects are designed to run on your machine; the API is **not authenticated** and should **never be exposed to the public internet** without adding proper authentication, authorization, rate limiting, persistence controls, and TLS.
-
-### API endpoints
-
-| Method | URL | Request | Response |
-| --- | --- | --- | --- |
-| GET | `/api/health` | none | health JSON |
-| GET | `/api/conversations` | none | list of conversations |
-| POST | `/api/conversations` | `{ "title": "My first chat" }` | new conversation record |
-| GET | `/api/conversations/{id}` | none | conversation plus messages |
-| POST | `/api/conversations/{id}/messages` | `{ "message": "Hello" }` | full assistant response |
-| POST | `/api/conversations/{id}/stream` | `{ "message": "Hello" }` | `text/event-stream` with `delta`, `done`, `error` events |
-
-Example using PowerShell:
-
-```powershell
-$chat = Invoke-RestMethod -Uri http://localhost:5080/api/conversations -Method Post -ContentType 'application/json' -Body '{"title":"API test"}'
-Invoke-RestMethod -Uri "http://localhost:5080/api/conversations/$($chat.id)/messages" -Method Post -ContentType 'application/json' -Body '{"message":"Tell me about ELIZA."}'
-```
-
-The streaming endpoint uses **POST**, not a browser `EventSource` GET, so the Blazor app reads SSE from an `HttpClient` response stream. Multi-turn requests for the same conversation are serialized by an in-process semaphore. The filesystem persistence layer is suitable for a single local API process, not multi-instance deployment.
+**API choices:** The older six labs use `OpenAI` SDK types directly. The tool labs send the Learn examples' JSON payloads to `/openai/v1/responses`, `/openai/v1/files`, and `/openai/v1/vector_stores` using `HttpClient`. They reuse `FoundryOptions` and the `Azure.Identity` package, but obtain an Entra token for the `https://cognitiveservices.azure.com/.default` scope required by the resource REST API. `AZURE_OPENAI_API_KEY` continues to take precedence.
 
 ## Understand the architecture
 
@@ -142,12 +128,15 @@ The streaming endpoint uses **POST**, not a browser `EventSource` GET, so the Bl
 03.ContextChat -----+
 04.StreamingChat ---+
 05.AsyncChat -------+----> Shared.FoundryClient ----> Azure OpenAI /openai/v1/
-06.ChatHistory -----+               |
-07.ChatApi ---------+               +-- JSON conversation store
-08.BlazorChat --------------HTTP/SSE--> 07.ChatApi
+06.ChatHistory -----+               +-- JSON conversation store
+07.CodeInterpreter -+
+08.WebSearch -------+
+09.FileSearch ------+----> FoundryToolRestClient ----> Azure OpenAI v1 REST
+10.FunctionCalling +               +-- FoundryVectorStoreSetup (09, 11)
+11.ToolsChat -------+
 ```
 
-The original lab's five stages are preserved as **distinct implementations** rather than one ever-changing program. Projects 06–08 are practical follow-on extensions. Conversation continuity depends on the Foundry Responses service retaining the referenced response ID. If responses expire or cannot be retrieved, start a new conversation; storing local text alone is not enough to recreate all server-side context with `previous_response_id`.
+The original lab's five stages are preserved as **distinct implementations** rather than one ever-changing program. Project 06 is a practical follow-on extension. Conversation continuity depends on the Foundry Responses service retaining the referenced response ID. If responses expire or cannot be retrieved, start a new conversation; storing local text alone is not enough to recreate all server-side context with `previous_response_id`.
 
 ## Troubleshooting
 
@@ -156,13 +145,17 @@ The original lab's five stages are preserved as **distinct implementations** rat
 - **404:** use the *deployment name*, correct resource endpoint, and make sure the deployed model supports the API you are calling.
 - **Unsupported API / model errors:** confirm the deployed model supports Chat Completions and/or Responses and the region exposes the needed API. Some Foundry models may support only one.
 - **`previous_response_id` invalid:** begin a new chat; response continuity depends on server-side stored state.
-- **Blazor cannot connect:** start `07.ChatApi` first and confirm `/api/health` returns HTTP 200. Ensure `CHAT_API_URL` matches the API URL.
 - **NuGet errors:** verify NuGet network access and restore the centrally managed packages: `OpenAI 2.15.0` and `Azure.Identity 1.21.0`.
+- **Tool not supported / 400:** choose a Responses-compatible model and region with the requested tool enabled.
+- **File Search setup:** check document path, extension, vector store access, and indexing status. Retry with a saved `vs_...` ID instead of creating new stores.
 - **Build warnings `OPENAI001`:** the official Responses SDK marks some APIs experimental, even when underlying REST features are available.
 
 ## References
 
-- Microsoft Learn lab: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/03-foundry-sdk.html
+- Microsoft Learn chat lab: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/03-foundry-sdk.html
+- Microsoft Learn tool module: https://learn.microsoft.com/en-us/training/modules/use-generative-ai-tools/
+- Microsoft Learn Margie’s Travel exercise: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/04a-use-own-data.html
+- Azure OpenAI v1 Files and Vector Stores REST reference: https://learn.microsoft.com/en-us/rest/api/microsoft-foundry/azureopenai/files
 - Foundry C# Responses API examples: https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses
 - Chat Completions C# example: https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/chatgpt
 - Official OpenAI .NET SDK: https://github.com/openai/openai-dotnet
