@@ -1,14 +1,21 @@
 <Solution>
-  <Project Path="src/01.BasicChat/01.BasicChat.csproj" />
-  <Project Path="src/02.ResponsesChat/02.ResponsesChat.csproj" />
-  <Project Path="src/03.ContextChat/03.ContextChat.csproj" />
-  <Project Path="src/04.StreamingChat/04.StreamingChat.csproj" />
-  <Project Path="src/05.AsyncChat/05.AsyncChat.csproj" />
-  <Project Path="src/06.ChatHistory/06.ChatHistory.csproj" />
-  <Project Path="src/07.CodeInterpreter/07.CodeInterpreter.csproj" />
-  <Project Path="src/08.WebSearch/08.WebSearch.csproj" />
-  <Project Path="src/09.FileSearch/09.FileSearch.csproj" />
-  <Project Path="src/10.FunctionCalling/10.FunctionCalling.csproj" />
-  <Project Path="src/11.ToolsChat/11.ToolsChat.csproj" />
+  <Folder Name="/01-develop-generative-ai-apps/" />
+  <Folder Name="/01-develop-generative-ai-apps/03-foundry-sdk/">
+    <Project Path="src/01.BasicChat/01.BasicChat.csproj" />
+    <Project Path="src/02.ResponsesChat/02.ResponsesChat.csproj" />
+    <Project Path="src/03.ContextChat/03.ContextChat.csproj" />
+    <Project Path="src/04.StreamingChat/04.StreamingChat.csproj" />
+    <Project Path="src/05.AsyncChat/05.AsyncChat.csproj" />
+    <Project Path="src/06.ChatHistory/06.ChatHistory.csproj" />
+  </Folder>
+  <Folder Name="/01-develop-generative-ai-apps/04-use-generative-ai-tools/">
+    <Project Path="src/07.CodeInterpreter/01.CodeInterpreter.csproj" />
+    <Project Path="src/08.WebSearch/02.WebSearch.csproj" />
+    <Project Path="src/09.FileSearch/03.FileSearch.csproj" />
+    <Project Path="src/10.FunctionCalling/04.FunctionCalling.csproj" />
+    <Project Path="src/11.ToolsChat/05.ToolsChat.csproj" />
+  </Folder>
+  <Folder Name="/01-develop-generative-ai-apps/05-optimize-generative-ai-model-performance/" />
+  <Folder Name="/01-develop-generative-ai-apps/06-responsible-ai-studio/" />
   <Project Path="src/Shared.FoundryClient/Shared.FoundryClient.csproj" />
 </Solution>
