@@ -1,0 +1,15 @@
+.vs/
+*.suo
+*.user
+**/bin/
+**/obj/
+**/artifacts/
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+**/*.egg-info/
+*.py[cod]
+.env
+.env.*
+!.env.example

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "E-01",
+    "timestamp": "2026-10-05T09:00:00Z",
+    "kind": "feedback",
+    "severity": 2,
+    "actorToken": "anon-A",
+    "summary": "Early canary user requests more transparent source citations.",
+    "verified": true
+  },
+  {
+    "id": "E-02",
+    "timestamp": "2026-10-05T09:05:00Z",
+    "kind": "release_approval",
+    "severity": 1,
+    "actorToken": "",
+    "summary": "Stakeholders approve limited rollout after legal, privacy, and security checks.",
+    "verified": true
+  },
+  {
+    "id": "E-03",
+    "timestamp": "2026-10-05T09:10:00Z",
+    "kind": "abuse",
+    "severity": 3,
+    "actorToken": "anon-X",
+    "summary": "A pseudonymous actor repeatedly probes the guardrails.",
+    "verified": false
+  },
+  {
+    "id": "E-04",
+    "timestamp": "2026-10-05T09:11:00Z",
+    "kind": "abuse",
+    "severity": 4,
+    "actorToken": "anon-X",
+    "summary": "Second abuse signal verified by an analyst.",
+    "verified": true
+  },
+  {
+    "id": "E-05",
+    "timestamp": "2026-10-05T09:15:00Z",
+    "kind": "feedback",
+    "severity": 3,
+    "actorToken": "anon-B",
+    "summary": "A user reports a misleading statement about travel documentation.",
+    "verified": true
+  },
+  {
+    "id": "E-06",
+    "timestamp": "2026-10-05T09:20:00Z",
+    "kind": "verified_harm",
+    "severity": 5,
+    "actorToken": "anon-C",
+    "summary": "A serious harmful response is verified by the safety reviewer.",
+    "verified": true
+  },
+  {
+    "id": "E-07",
+    "timestamp": "2026-10-05T09:30:00Z",
+    "kind": "release_approval",
+    "severity": 1,
+    "actorToken": "",
+    "summary": "Attempted rollout approval while an incident is unresolved.",
+    "verified": true
+  }
+]

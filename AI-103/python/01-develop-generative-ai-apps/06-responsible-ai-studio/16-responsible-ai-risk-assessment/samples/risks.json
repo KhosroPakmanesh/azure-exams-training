@@ -1,0 +1,98 @@
+[
+  {
+    "id": "R-01",
+    "category": "Factual accuracy",
+    "scenario": "The bot answers questions about cancellation terms without source documents.",
+    "harm": "Invented refund deadlines could cause financial loss.",
+    "likelihood": 4,
+    "impact": 4,
+    "owner": "Support lead",
+    "mitigation": "Ground answers in current policy documents and state uncertainty.",
+    "evidence": "No authoritative policy source connected",
+    "status": "Proposed"
+  },
+  {
+    "id": "R-02",
+    "category": "Privacy",
+    "scenario": "A user asks for another traveler's itinerary or booking details.",
+    "harm": "Private travel information could be disclosed.",
+    "likelihood": 3,
+    "impact": 5,
+    "owner": "Privacy lead",
+    "mitigation": "Apply authorization checks before any account-specific lookup.",
+    "evidence": "Review access controls; do not paste customer data into prompts",
+    "status": "Proposed"
+  },
+  {
+    "id": "R-03",
+    "category": "Bias and fairness",
+    "scenario": "A customer uses a different dialect or language.",
+    "harm": "Service or refusal quality may vary by group.",
+    "likelihood": 3,
+    "impact": 4,
+    "owner": "Responsible AI reviewer",
+    "mitigation": "Use diverse language test cases and review disparities.",
+    "evidence": "Collect consented, privacy-safe test scenarios",
+    "status": "Testing"
+  },
+  {
+    "id": "R-04",
+    "category": "Unsafe assistance",
+    "scenario": "A user tries to solicit guidance for wrongdoing.",
+    "harm": "The assistant could facilitate harm.",
+    "likelihood": 2,
+    "impact": 5,
+    "owner": "Safety lead",
+    "mitigation": "Keep Foundry guardrails enabled and add safe-response guidance.",
+    "evidence": "Documented in the red-team test plan",
+    "status": "Proposed"
+  },
+  {
+    "id": "R-05",
+    "category": "Prompt injection",
+    "scenario": "A retrieved brochure includes instructions to ignore the developer system message.",
+    "harm": "Untrusted document content may override intended behavior.",
+    "likelihood": 4,
+    "impact": 4,
+    "owner": "Security lead",
+    "mitigation": "Treat retrieved data as untrusted and test prompt shields.",
+    "evidence": "Synthetic document injection tests planned",
+    "status": "Testing"
+  },
+  {
+    "id": "R-06",
+    "category": "False positives",
+    "scenario": "A benign travel-safety question is mistaken for prohibited content.",
+    "harm": "A legitimate traveler may not receive needed information.",
+    "likelihood": 3,
+    "impact": 3,
+    "owner": "Customer success lead",
+    "mitigation": "Review unnecessary refusals and offer helpful alternatives.",
+    "evidence": "Benign questions in evaluation set",
+    "status": "Proposed"
+  },
+  {
+    "id": "R-07",
+    "category": "Operational controls",
+    "scenario": "The assistant continues to serve responses after a verified harmful incident.",
+    "harm": "Known incidents could continue affecting customers.",
+    "likelihood": 2,
+    "impact": 5,
+    "owner": "Operations lead",
+    "mitigation": "Prepare pause, rollback, monitoring, and incident escalation procedures.",
+    "evidence": "Incident simulation exercise",
+    "status": "Proposed"
+  },
+  {
+    "id": "R-08",
+    "category": "Transparency",
+    "scenario": "A customer assumes the assistant is a human travel agent.",
+    "harm": "Users may overtrust incomplete AI responses.",
+    "likelihood": 4,
+    "impact": 2,
+    "owner": "Product owner",
+    "mitigation": "Disclose AI use, limitations, and human escalation options.",
+    "evidence": "UX disclosure checklist",
+    "status": "Proposed"
+  }
+]

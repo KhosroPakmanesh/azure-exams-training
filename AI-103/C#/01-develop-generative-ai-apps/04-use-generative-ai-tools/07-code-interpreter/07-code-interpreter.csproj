@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>AzureExamsTraining.AI103.CodeInterpreter</AssemblyName>
+    <RootNamespace>AzureExamsTraining.AI103.CodeInterpreter</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../shared/shared.csproj" />
+  </ItemGroup>
+</Project>

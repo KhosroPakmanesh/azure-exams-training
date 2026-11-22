@@ -1,0 +1,204 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "01 Basic Chat",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.03-foundry-sdk.01-basic-chat.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "02 Responses Chat",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.03-foundry-sdk.02-responses-chat.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "03 Context Chat",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.03-foundry-sdk.03-context-chat.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "04 Streaming Chat",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.03-foundry-sdk.04-streaming-chat.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "05 Async Chat",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.03-foundry-sdk.05-async-chat.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "06 Chat History",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.03-foundry-sdk.06-chat-history.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "07 Code Interpreter",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.04-use-generative-ai-tools.07-code-interpreter.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "08 Web Search",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.04-use-generative-ai-tools.08-web-search.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "09 File Search",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.04-use-generative-ai-tools.09-file-search.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "${input:fileSearchSource}"
+      ]
+    },
+    {
+      "name": "10 Function Calling",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.04-use-generative-ai-tools.10-function-calling.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "11 Tools Chat",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.04-use-generative-ai-tools.11-tools-chat.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "${input:travelBrochures}"
+      ]
+    },
+    {
+      "name": "12 Prompt Optimization (Preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.05-optimize-generative-ai-model-performance.12-prompt-optimization.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--preview"
+      ]
+    },
+    {
+      "name": "13 RAG Retrieval Optimization",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.05-optimize-generative-ai-model-performance.13-rag-optimization.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "${input:ragSource}"
+      ]
+    },
+    {
+      "name": "14 Fine-Tuning (Help)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.05-optimize-generative-ai-model-performance.14-fine-tuning.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--help"
+      ]
+    },
+    {
+      "name": "15 Optimization Benchmark (Preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.05-optimize-generative-ai-model-performance.15-optimization-benchmark.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--preview"
+      ]
+    },
+    {
+      "name": "16 Responsible AI Risk Assessment (Preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.06-responsible-ai-studio.16-responsible-ai-risk-assessment.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--preview"
+      ]
+    },
+    {
+      "name": "17 Harm Evaluation (Preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.06-responsible-ai-studio.17-harm-evaluation.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--preview"
+      ]
+    },
+    {
+      "name": "18 Content Safety Guardrails (Preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.06-responsible-ai-studio.18-content-safety-guardrails.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--preview"
+      ]
+    },
+    {
+      "name": "19 Responsible AI Operations (Preview)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "01-develop-generative-ai-apps.06-responsible-ai-studio.19-responsible-ai-operations.main",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--preview"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "fileSearchSource",
+      "type": "promptString",
+      "description": "Document path, directory, or vs_... vector store ID"
+    },
+    {
+      "id": "travelBrochures",
+      "type": "promptString",
+      "description": "Brochure PDF path, directory, or vs_... vector store ID"
+    },
+    {
+      "id": "ragSource",
+      "type": "promptString",
+      "description": "Document path, directory, vs_... store ID, or --sample"
+    }
+  ]
+}

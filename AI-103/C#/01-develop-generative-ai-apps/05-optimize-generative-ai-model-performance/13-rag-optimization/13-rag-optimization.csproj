@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>AzureExamsTraining.AI103.RagOptimization</AssemblyName>
+    <RootNamespace>AzureExamsTraining.AI103.RagOptimization</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../shared/shared.csproj" />
+    <None Update="samples\*.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

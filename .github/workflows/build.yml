@@ -1,0 +1,23 @@
+name: .NET 11 solution build
+on:
+  push:
+  pull_request:
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AI-103
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: 'AI-103/C#/global.json'
+      - name: Restore
+        working-directory: 'AI-103/C#'
+        run: dotnet restore AI-103.CSharp.slnx
+      - name: Build
+        working-directory: 'AI-103/C#'
+        run: dotnet build AI-103.CSharp.slnx --configuration Release --no-restore
+      - name: Verify lab paths and Python source
+        run: python3 scripts/verify-source.py

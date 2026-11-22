@@ -1,0 +1,19 @@
+{
+  "intents": [
+    {"id":"i01", "message":"Can you reserve flights for four travelers?", "expected":"BOOKING"},
+    {"id":"i02", "message":"I want my booking moved to next week.", "expected":"BOOKING"},
+    {"id":"i03", "message":"Please cancel my itinerary and give my money back.", "expected":"CANCELLATION"},
+    {"id":"i04", "message":"What's the status of my cancellation refund?", "expected":"CANCELLATION"},
+    {"id":"i05", "message":"Does my fare allow a second checked bag?", "expected":"BAGGAGE"},
+    {"id":"i06", "message":"How heavy can my suitcase be?", "expected":"BAGGAGE"},
+    {"id":"i07", "message":"What language do people speak in Iceland?", "expected":"OTHER"},
+    {"id":"i08", "message":"Tell me something interesting about Prague.", "expected":"OTHER"}
+  ],
+  "facts": [
+    {"id":"f01", "question":"Under Northstar Travel standard fare rules, how many days ahead must I cancel for a full refund?", "expectedFact":"7 days"},
+    {"id":"f02", "question":"What is Northstar Travel's extra checked bag fee per flight segment?", "expectedFact":"$45"},
+    {"id":"f03", "question":"How long does Northstar Travel say refund processing typically takes?", "expectedFact":"5 business days"},
+    {"id":"f04", "question":"What is the checked baggage weight limit in the Northstar Travel sample policy?", "expectedFact":"23 kg"},
+    {"id":"f05", "question":"How early should I arrive for an international Northstar Travel departure?", "expectedFact":"3 hours"}
+  ]
+}

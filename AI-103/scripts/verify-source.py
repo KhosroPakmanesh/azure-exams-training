@@ -1,62 +1,202 @@
 #!/usr/bin/env python3
-"""No-network structural verification of the .NET 11 SLNX solution; not a compiler."""
-from pathlib import Path
-import json
-import xml.etree.ElementTree as ET
-root = Path(__file__).resolve().parents[1]
-failures = []
-def check(ok, message):
-    print(("OK " if ok else "FAIL ") + message)
-    if not ok: failures.append(message)
+"""Check the AI-103 solution and matching lab paths without credentials."""
 
-sdk = json.loads((root / "global.json").read_text())["sdk"]
-check(sdk["version"] == "11.0.100", "GA SDK version 11.0.100 pinned")
-check(sdk["rollForward"] == "latestFeature", "Patch/feature updates remain possible")
-props = ET.parse(root / "Directory.Build.props").getroot()
-check(props.findtext("PropertyGroup/TargetFramework") == "net11.0", "Every project targets net11.0")
-check(props.findtext("PropertyGroup/LangVersion") == "15.0", "C# language version 15")
-solution = ET.parse(root / "FoundryCSharpLabs.slnx").getroot()
-paths = [p.attrib["Path"] for p in solution.findall("Project")]
-expected_apps = ["01.BasicChat", "02.ResponsesChat", "03.ContextChat", "04.StreamingChat",
-                 "05.AsyncChat", "06.ChatHistory", "07.CodeInterpreter", "08.WebSearch",
-                 "09.FileSearch", "10.FunctionCalling", "11.ToolsChat"]
-expected = {f"src/{name}/{name}.csproj" for name in expected_apps}
-expected.add("src/Shared.FoundryClient/Shared.FoundryClient.csproj")
-check(set(paths) == expected and len(paths) == 12, "One .slnx with the 11 labs and shared client")
-check(not list(root.glob("*.sln")), "No legacy .sln alongside .slnx")
-check(all((root / p).is_file() for p in paths), "All twelve .csproj files exist")
-packages = ET.parse(root / "Directory.Packages.props").getroot()
-versions = {p.get("Include"): p.get("Version") for p in packages.findall("ItemGroup/PackageVersion")}
-check(versions == {"OpenAI": "2.15.0", "Azure.Identity": "1.21.0"}, "Verified stable versions centralized")
-for path in paths:
-    project = ET.parse(root/path).getroot()
-    check(project.find("PropertyGroup/TargetFramework") is None, f"{path}: inherits net11.0")
-    for r in project.findall("ItemGroup/ProjectReference"):
-        ref=(root / path).parent / r.get("Include").replace("\\", "/")
-        check(ref.resolve().is_file(), f"{path}: reference {r.get('Include')} exists")
-    for r in project.findall("ItemGroup/PackageReference"):
-        check(r.get("Version") is None, f"{path}: package managed centrally")
-        check(r.get("Include") in versions, f"{path}: package {r.get('Include')} is pinned")
-for name in ("publish-all.sh", "publish-all.ps1", "build-and-package.sh", "build-and-package.ps1"):
-    content=(root/"scripts"/name).read_text()
-    check("FoundryCSharpLabs.slnx" in content, f"{name}: uses SLNX") if "publish" in name or "build" in name else None
-    check(".sln'" not in content and "net8.0" not in content, f"{name}: no old target")
-env_file = root / "src/Shared.FoundryClient/.env"
-check(not env_file.exists() or env_file.is_file(), "Optional shared .env is a regular file")
-check((root / "src/Shared.FoundryClient/.env.example").is_file(), "Safe .env.example is present")
-check(all(f"{key}=" in (env_file if env_file.is_file() else root / "src/Shared.FoundryClient/.env.example").read_text() for key in ("AZURE_OPENAI_ENDPOINT", "MODEL_DEPLOYMENT", "AZURE_OPENAI_API_KEY")), "Credential template has all fields")
-check((root / "src/Shared.FoundryClient/FoundryEnvFile.cs").is_file(), "Shared .env loader exists")
-check("FoundryEnvFile.Load()" in (root / "src/Shared.FoundryClient/FoundryOptions.cs").read_text(), "Foundry options load shared .env")
-for name, tool in (("07.CodeInterpreter", "code_interpreter"), ("08.WebSearch", "web_search"),
-                   ("09.FileSearch", "file_search"), ("10.FunctionCalling", "function"),
-                   ("11.ToolsChat", "file_search")):
-    check(tool in (root / "src" / name / "Program.cs").read_text(), f"{name} configures {tool}")
-check("web_search" in (root / "src/11.ToolsChat/Program.cs").read_text(),
-      "11.ToolsChat also configures web_search")
-check((root / "src/Shared.FoundryClient/FoundryToolRestClient.cs").is_file(),
-      "REST adapter for tool-enabled Responses exists")
-check((root / "src/Shared.FoundryClient/FoundryVectorStoreSetup.cs").is_file(),
-      "Document upload and vector store helper exists")
-if failures:
-    raise SystemExit(f"{len(failures)} validation failure(s).")
-print("PASS: .NET 11 project structure verified. C# compilation not performed.")
+import argparse
+import ast
+import json
+from pathlib import Path, PurePosixPath
+from xml.etree import ElementTree
+
+ROOT = Path(__file__).resolve().parents[1]
+CSHARP = ROOT / "C#"
+PYTHON = ROOT / "python"
+SOLUTION = CSHARP / "AI-103.CSharp.slnx"
+SHARED_PROJECT = "shared/shared.csproj"
+
+
+def verify(projects: list[str], solution: ElementTree.Element) -> None:
+    errors = []
+
+    def check(condition: bool, message: str) -> None:
+        if not condition:
+            errors.append(message)
+
+    check(len(projects) == len(set(projects)), "The solution lists duplicate projects.")
+    check(
+        SHARED_PROJECT in projects, "The solution must include the C# shared library."
+    )
+    discovered = {
+        path.relative_to(CSHARP).as_posix() for path in CSHARP.glob("*/*/*/*.csproj")
+    }
+    check(
+        set(projects) - {SHARED_PROJECT} == discovered,
+        "The solution and C# lab folders disagree.",
+    )
+    for folder in solution.findall("./Folder"):
+        for project in folder.findall("Project"):
+            parts = PurePosixPath(project.attrib["Path"]).parts
+            check(
+                len(parts) == 4
+                and "/".join(parts[:2]) == folder.attrib["Name"].strip("/"),
+                f"{project.attrib['Path']} must match its solution chapter and module.",
+            )
+
+    expected_python = {PurePosixPath(path).parts[:-1] for path in discovered}
+    found_python = {
+        entry.parent.relative_to(PYTHON).parts for entry in PYTHON.glob("*/*/*/main.py")
+    }
+    check(
+        expected_python == found_python,
+        "Each C# lab needs a matching Python entry point.",
+    )
+    launch_file = PYTHON / ".vscode/launch.json"
+    configurations = json.loads(launch_file.read_text(encoding="utf-8"))[
+        "configurations"
+    ]
+    expected_modules = {".".join((*parts, "main")) for parts in found_python}
+    check(
+        len(configurations) == len(expected_modules)
+        and {config.get("module") for config in configurations} == expected_modules,
+        "VS Code must have exactly one launch entry per Python lab.",
+    )
+    names = [config.get("name") for config in configurations]
+    check(
+        all(names) and len(set(names)) == len(names),
+        "VS Code launch names must be unique.",
+    )
+    for config in configurations:
+        check(
+            config.get("type") == "debugpy"
+            and config.get("request") == "launch"
+            and config.get("cwd") == "${workspaceFolder}"
+            and config.get("console") == "integratedTerminal",
+            f"{config.get('name')} should launch in the Python workspace terminal.",
+        )
+
+    package_versions = ElementTree.parse(CSHARP / "Directory.Packages.props")
+    pinned = {
+        entry.attrib["Include"]
+        for entry in package_versions.findall(".//PackageVersion")
+    }
+
+    for rel in projects:
+        project_path = CSHARP / rel
+        if not project_path.is_file() or not project_path.resolve().is_relative_to(
+            CSHARP.resolve()
+        ):
+            errors.append(f"Missing or misplaced C# project: {rel}")
+            continue
+        project = ElementTree.parse(project_path)
+        namespace = project.findtext("./PropertyGroup/RootNamespace") or ""
+        assembly = project.findtext("./PropertyGroup/AssemblyName")
+        if rel == SHARED_PROJECT:
+            check(
+                namespace == "AzureExamsTraining.AI103.Shared" and assembly == "shared",
+                "The shared project must use the exam namespace and the shared assembly name.",
+            )
+        else:
+            check(
+                namespace.startswith("AzureExamsTraining.AI103.")
+                and namespace == assembly,
+                f"{rel} must use matching exam-scoped namespace and assembly names.",
+            )
+        check(
+            project.find("./PropertyGroup/TargetFramework") is None,
+            f"{rel} should inherit its target framework.",
+        )
+        for package in project.findall(".//PackageReference"):
+            check(
+                package.attrib.get("Include") in pinned
+                and package.get("Version") is None,
+                f"{rel} should use central package versions.",
+            )
+        if rel != SHARED_PROJECT:
+            parts = project_path.parent.relative_to(CSHARP).parts
+            lab_python = PYTHON.joinpath(*parts)
+            refs = project.findall(".//ProjectReference")
+            check(
+                len(refs) == 1
+                and (
+                    project_path.parent / refs[0].attrib["Include"].replace("\\", "/")
+                ).resolve()
+                == (CSHARP / SHARED_PROJECT).resolve(),
+                f"{rel} should reference shared.csproj.",
+            )
+            check(
+                project_path.stem == project_path.parent.name,
+                f"{rel} must match its lab folder name.",
+            )
+            for lab in (project_path.parent, lab_python):
+                check(
+                    (lab / "README.md").is_file(),
+                    f"Missing lab README: {lab.relative_to(ROOT)}",
+                )
+            for sample in (project_path.parent / "samples").glob("*"):
+                if sample.is_file():
+                    counterpart = lab_python / "samples" / sample.name
+                    check(
+                        counterpart.is_file()
+                        and counterpart.read_bytes() == sample.read_bytes(),
+                        f"Sample differs between languages: {sample.relative_to(ROOT)}",
+                    )
+
+    sdk = json.loads((CSHARP / "global.json").read_text(encoding="utf-8"))["sdk"]
+    props = ElementTree.parse(CSHARP / "Directory.Build.props")
+    check(sdk["version"].startswith("11."), "Expected a .NET 11 SDK.")
+    check(
+        props.findtext("./PropertyGroup/TargetFramework") == "net11.0",
+        "Expected net11.0.",
+    )
+    for shared in (CSHARP / "shared", PYTHON / "shared"):
+        example = shared / ".env.example"
+        check(
+            example.is_file(),
+            f"Missing credentials template: {example.relative_to(ROOT)}",
+        )
+        if example.is_file():
+            settings = example.read_text(encoding="utf-8-sig")
+            for key in (
+                "AZURE_OPENAI_ENDPOINT",
+                "MODEL_DEPLOYMENT",
+                "AZURE_OPENAI_API_KEY",
+            ):
+                check(
+                    f"{key}=" in settings,
+                    f"{example.relative_to(ROOT)} is missing {key}.",
+                )
+
+    for folder in [
+        PYTHON / "shared",
+        *(PYTHON.joinpath(*parts) for parts in found_python),
+    ]:
+        for source in folder.glob("*.py"):
+            try:
+                ast.parse(source.read_text(encoding="utf-8-sig"), filename=str(source))
+            except SyntaxError as error:
+                errors.append(str(error))
+
+    if errors:
+        raise SystemExit("\n".join(errors))
+    print(
+        f"Verified {len(discovered)} C# labs, {len(found_python)} Python labs and their VS Code launch entries."
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--list-projects",
+        action="store_true",
+        help="List project paths relative to the solution.",
+    )
+    args = parser.parse_args()
+    solution = ElementTree.parse(SOLUTION).getroot()
+    projects = [project.attrib["Path"] for project in solution.findall(".//Project")]
+    if args.list_projects:
+        print("\n".join(projects))
+    else:
+        verify(projects, solution)
+
+
+if __name__ == "__main__":
+    main()

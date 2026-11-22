@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>AzureExamsTraining.AI103.ResponsibleAiOperations</AssemblyName>
+    <RootNamespace>AzureExamsTraining.AI103.ResponsibleAiOperations</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../shared/shared.csproj" />
+    <None Update="samples\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

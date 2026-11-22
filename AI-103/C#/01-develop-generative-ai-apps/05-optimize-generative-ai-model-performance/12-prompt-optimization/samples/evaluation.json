@@ -1,0 +1,18 @@
+[
+  {"id":"p01","message":"Can you book a flight to Denver for next Wednesday?","expected":"BOOKING"},
+  {"id":"p02","message":"I need to shift my departure to the following morning.","expected":"BOOKING"},
+  {"id":"p03","message":"Is seat selection available for my new reservation?","expected":"BOOKING"},
+  {"id":"p04","message":"Please change my return flight to Saturday.","expected":"BOOKING"},
+  {"id":"p05","message":"Cancel my trip and start the refund.","expected":"CANCELLATION"},
+  {"id":"p06","message":"How can I get my money back after canceling?","expected":"CANCELLATION"},
+  {"id":"p07","message":"I no longer want to travel. Void my booking.","expected":"CANCELLATION"},
+  {"id":"p08","message":"My flight was canceled. When will I receive a refund?","expected":"CANCELLATION"},
+  {"id":"p09","message":"What is the checked bag weight allowance?","expected":"BAGGAGE"},
+  {"id":"p10","message":"Does a stroller count as extra luggage?","expected":"BAGGAGE"},
+  {"id":"p11","message":"Can I pay to add another suitcase?","expected":"BAGGAGE"},
+  {"id":"p12","message":"My carry-on is too large. What are the limits?","expected":"BAGGAGE"},
+  {"id":"p13","message":"What is the capital city of Finland?","expected":"OTHER"},
+  {"id":"p14","message":"Do you provide a guide to local museums?","expected":"OTHER"},
+  {"id":"p15","message":"How warm is Lisbon in March?","expected":"OTHER"},
+  {"id":"p16","message":"What currency is used in Japan?","expected":"OTHER"}
+]

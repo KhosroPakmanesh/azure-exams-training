@@ -1,0 +1,31 @@
+<Solution>
+  <Folder Name="/01-develop-generative-ai-apps/" />
+  <Folder Name="/01-develop-generative-ai-apps/03-foundry-sdk/">
+    <Project Path="01-develop-generative-ai-apps/03-foundry-sdk/01-basic-chat/01-basic-chat.csproj" />
+    <Project Path="01-develop-generative-ai-apps/03-foundry-sdk/02-responses-chat/02-responses-chat.csproj" />
+    <Project Path="01-develop-generative-ai-apps/03-foundry-sdk/03-context-chat/03-context-chat.csproj" />
+    <Project Path="01-develop-generative-ai-apps/03-foundry-sdk/04-streaming-chat/04-streaming-chat.csproj" />
+    <Project Path="01-develop-generative-ai-apps/03-foundry-sdk/05-async-chat/05-async-chat.csproj" />
+    <Project Path="01-develop-generative-ai-apps/03-foundry-sdk/06-chat-history/06-chat-history.csproj" />
+  </Folder>
+  <Folder Name="/01-develop-generative-ai-apps/04-use-generative-ai-tools/">
+    <Project Path="01-develop-generative-ai-apps/04-use-generative-ai-tools/07-code-interpreter/07-code-interpreter.csproj" />
+    <Project Path="01-develop-generative-ai-apps/04-use-generative-ai-tools/08-web-search/08-web-search.csproj" />
+    <Project Path="01-develop-generative-ai-apps/04-use-generative-ai-tools/09-file-search/09-file-search.csproj" />
+    <Project Path="01-develop-generative-ai-apps/04-use-generative-ai-tools/10-function-calling/10-function-calling.csproj" />
+    <Project Path="01-develop-generative-ai-apps/04-use-generative-ai-tools/11-tools-chat/11-tools-chat.csproj" />
+  </Folder>
+  <Folder Name="/01-develop-generative-ai-apps/05-optimize-generative-ai-model-performance/">
+    <Project Path="01-develop-generative-ai-apps/05-optimize-generative-ai-model-performance/12-prompt-optimization/12-prompt-optimization.csproj" />
+    <Project Path="01-develop-generative-ai-apps/05-optimize-generative-ai-model-performance/13-rag-optimization/13-rag-optimization.csproj" />
+    <Project Path="01-develop-generative-ai-apps/05-optimize-generative-ai-model-performance/14-fine-tuning/14-fine-tuning.csproj" />
+    <Project Path="01-develop-generative-ai-apps/05-optimize-generative-ai-model-performance/15-optimization-benchmark/15-optimization-benchmark.csproj" />
+  </Folder>
+  <Folder Name="/01-develop-generative-ai-apps/06-responsible-ai-studio/">
+    <Project Path="01-develop-generative-ai-apps/06-responsible-ai-studio/16-responsible-ai-risk-assessment/16-responsible-ai-risk-assessment.csproj" />
+    <Project Path="01-develop-generative-ai-apps/06-responsible-ai-studio/17-harm-evaluation/17-harm-evaluation.csproj" />
+    <Project Path="01-develop-generative-ai-apps/06-responsible-ai-studio/18-content-safety-guardrails/18-content-safety-guardrails.csproj" />
+    <Project Path="01-develop-generative-ai-apps/06-responsible-ai-studio/19-responsible-ai-operations/19-responsible-ai-operations.csproj" />
+  </Folder>
+  <Project Path="shared/shared.csproj" />
+</Solution>

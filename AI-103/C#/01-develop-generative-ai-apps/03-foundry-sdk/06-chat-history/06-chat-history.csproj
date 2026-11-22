@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>AzureExamsTraining.AI103.ChatHistory</AssemblyName>
+    <RootNamespace>AzureExamsTraining.AI103.ChatHistory</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../shared/shared.csproj" />
+  </ItemGroup>
+</Project>

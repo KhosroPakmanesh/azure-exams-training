@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AssemblyName>shared</AssemblyName>
+    <RootNamespace>AzureExamsTraining.AI103.Shared</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenAI" />
+    <PackageReference Include="Azure.Identity" />
+  </ItemGroup>
+</Project>
