@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AzureExamsTraining.AI103.Shared;
 
 OutputPrinter.PrintIntroduction();
@@ -40,7 +41,8 @@ try
 
         try
         {
-            using System.Text.Json.JsonDocument? responseJsonDocument = await foundryToolRestClient.CreateResponseAsync(
+            using JsonDocument? responseJsonDocument =
+                await foundryToolRestClient.CreateResponseAsync(
                 promptString,
                 toolObjects,
                 previousIdString,

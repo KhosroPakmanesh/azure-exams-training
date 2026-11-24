@@ -52,14 +52,20 @@ try
                 promptString,
                 toolObjects,
                 previousIdString);
+
             // Function calls are requests, not executable code; C# runs only get_time.
             // A round limit prevents an unexpected model/tool loop.
             for (int roundInt = 0; roundInt < 8; roundInt++)
             {
-                JsonElement[]? callJsonElements = responseJsonDocument.RootElement.GetProperty("output").EnumerateArray().Where(
-                    itemJsonElement => itemJsonElement.TryGetProperty(
+                JsonElement[]? callJsonElements = responseJsonDocument
+                    .RootElement
+                    .GetProperty("output")
+                    .EnumerateArray()
+                    .Where(itemJsonElement => itemJsonElement.TryGetProperty(
                         "type",
-                        out JsonElement kindJsonElement) && kindJsonElement.GetString() == "function_call").ToArray();
+                        out JsonElement kindJsonElement)
+                        && kindJsonElement.GetString() == "function_call")
+                    .ToArray();
                 if (callJsonElements.Length == 0)
                 {
                     break;
@@ -81,7 +87,8 @@ try
 
                     string? argumentsTextString = callJsonElement.GetProperty("arguments").GetString() ?? "{}";
                     using JsonDocument? argumentsJsonDocument = JsonDocument.Parse(argumentsTextString);
-                    if (argumentsJsonDocument.RootElement.ValueKind != JsonValueKind.Object || argumentsJsonDocument.RootElement.EnumerateObject().Any())
+                    if (argumentsJsonDocument.RootElement.ValueKind != JsonValueKind.Object
+                        || argumentsJsonDocument.RootElement.EnumerateObject().Any())
                     {
                         throw new InvalidOperationException("get_time takes no arguments.");
                     }
@@ -92,7 +99,7 @@ try
                         {
                             type = "function_call_output",
                             call_id = callJsonElement.GetProperty("call_id").GetString(),
-                            output = DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss zzz")
+                            output = GetTime()
                         });
                 }
 
@@ -122,4 +129,8 @@ catch (Exception exception)
 {
     ConsoleChat.ShowError(exception);
     Environment.ExitCode = 1;
+}
+static string GetTime()
+{
+    return DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss zzz");
 }

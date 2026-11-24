@@ -29,7 +29,11 @@ try
 
     ];
     string? previousIdString = null;
-    const string instructionsString = "You are a travel assistant that provides information on travel services available from Margie's Travel. " + "Answer questions about services offered by Margie's Travel using the provided travel brochures. " + "Search the web for general information about destinations or current travel advice. " + "Do not invent travel services that are not documented in the brochures.";
+    const string instructionsString =
+        "You are a travel assistant that provides information on travel services available from Margie's Travel. "
+        + "Answer questions about services offered by Margie's Travel using the provided travel brochures. "
+        + "Search the web for general information about destinations or current travel advice. "
+        + "Do not invent travel services that are not documented in the brochures.";
 
     // ------------------------------------------------------------------
     // CHAT TURNS

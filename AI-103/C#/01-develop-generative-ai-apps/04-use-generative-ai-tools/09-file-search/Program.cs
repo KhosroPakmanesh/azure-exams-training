@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AzureExamsTraining.AI103.Shared;
 
 OutputPrinter.PrintIntroduction();
@@ -44,11 +45,13 @@ try
 
         try
         {
-            using System.Text.Json.JsonDocument? responseJsonDocument = await foundryToolRestClient.CreateResponseAsync(
+            using JsonDocument? responseJsonDocument =
+                await foundryToolRestClient.CreateResponseAsync(
                 promptString,
                 toolObjects,
                 previousIdString,
-                "Answer questions using the supplied documents. " + "When the documents do not contain the answer, say so.",
+                "Answer questions using the supplied documents. " +
+                    "When the documents do not contain the answer, say so.",
                 include: ["file_search_call.results"]);
             OutputPrinter.PrintAnswer(responseJsonDocument);
             previousIdString = FoundryToolRestClient.RequireId(responseJsonDocument);
