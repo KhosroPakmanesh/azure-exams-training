@@ -67,3 +67,4 @@ catch (Exception exception)
     ConsoleChat.ShowError(exception);
     Environment.ExitCode = 1;
 }
+
